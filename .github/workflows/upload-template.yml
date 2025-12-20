@@ -31,6 +31,7 @@ jobs:
             -x "node_modules/*" \
             -x ".gitignore" \
             -x ".next/*" \
+            -x "gha-creds-*" \
             -x ".github/*"
 
       - name: Upload to GCS
