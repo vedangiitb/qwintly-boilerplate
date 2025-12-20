@@ -1,0 +1,33 @@
+name: Upload Template to GCS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload-template:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Zip template
+        run: |
+          zip -r template-v1.zip . \
+            -x ".git/*" \
+            -x "node_modules/*" \
+            -x ".gitignore" \
+            -x ".next/*" \
+            -x ".github/*"
+
+      - name: Upload to GCS
+        run: |
+          gsutil cp template-v1.zip gs://${{ vars.GCS_BUCKET }}/template-v1.zip
