@@ -1,5 +1,5 @@
 # =========================
-# 1️⃣ Install dependencies
+# Install dependencies
 # =========================
 FROM node:20-alpine AS deps
 WORKDIR /app
@@ -15,7 +15,7 @@ RUN npm ci
 
 
 # =========================
-# 2️⃣ Build Next.js app
+# Build Next.js app
 # =========================
 FROM node:20-alpine AS builder
 WORKDIR /app
@@ -33,7 +33,7 @@ RUN npm run build
 
 
 # =========================
-# 3️⃣ Production runtime
+# Production runtime
 # =========================
 FROM node:20-alpine AS runner
 WORKDIR /app
@@ -48,7 +48,7 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-# Non-root user (Cloud Run best practice)
+# Non-root user
 RUN addgroup -g 1001 nodejs \
  && adduser -S nextjs -u 1001
 

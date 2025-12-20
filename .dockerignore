@@ -7,3 +7,4 @@ npm-debug.log
 Dockerfile
 cloudbuild.yaml
 .github
+dist
