@@ -10,7 +10,7 @@ steps:
     args:
       - build
       - -t
-      - gcr.io/$PROJECT_ID/$_SERVICE_NAME
+      - "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}"
       - .
 
   # =========================
@@ -27,7 +27,7 @@ steps:
         "--region",
         "$_REGION",
         "--image",
-        "gcr.io/$PROJECT_ID/$_SERVICE_NAME",
+        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
         "--platform",
         "managed",
         "--allow-unauthenticated"
