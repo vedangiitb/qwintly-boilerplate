@@ -21,15 +21,11 @@ steps:
       [
         "run",
         "deploy",
-        "$_SERVICE_NAME",
-        "--project",
-        "$PROJECT_ID",
-        "--region",
-        "$_REGION",
-        "--image",
-        "gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
-        "--platform",
-        "managed",
+        "${_SERVICE_NAME}",
+        "$--project=${PROJECT_ID}",
+        "--region=${_REGION}",
+        "--image=gcr.io/${PROJECT_ID}/${_SERVICE_NAME}",
+        "--platform=managed",
         "--allow-unauthenticated"
       ]
 
