@@ -1,3 +1,6 @@
+// DESC_START
+// Layout component for the root page.
+//  DESC_END
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
