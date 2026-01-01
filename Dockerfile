@@ -28,6 +28,11 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy full source
 COPY . .
 
+# VALIDATION (IMPORTANT)
+RUN npm run lint
+RUN npm run typecheck
+
+
 # Build
 RUN npm run build
 
