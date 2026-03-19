@@ -18,7 +18,7 @@ jobs:
       id-token: write
 
     env:
-      TEMPLATE_NAME: template-${{ github.sha }}.zip
+      TEMPLATE_NAME: base-template.zip
 
     steps:
       - name: Checkout repo
