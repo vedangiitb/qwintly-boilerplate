@@ -11,6 +11,13 @@ export default defineConfig([
     files: ["**/*.{ts,tsx}"],
     ...nextTs[0],
   },
+  {
+    settings: {
+      react: {
+        version: "19.0",
+      },
+    },
+  },
   globalIgnores([
     ".next/**",
     "out/**",
