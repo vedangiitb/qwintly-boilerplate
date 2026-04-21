@@ -18,7 +18,7 @@ export const projectConfig = {
     rendering: "server-components-by-default (use 'use client' only when needed)",
     serverActions: "optional (not used in boilerplate)",
     apiRoutes: "optional (not used in boilerplate)",
-    dataFetching: "client-side (fetch) + local data modules in lib/",
+    dataFetching: "client-side (fetch) (content/copy is co-located in components)",
   },
   tooling: {
     packageManager: "npm",
@@ -30,14 +30,13 @@ export const projectConfig = {
   folders: {
     "app/": "routes, layouts, metadata, globals.css",
     "components/": "UI sections + shared components",
-    "components/marketing/": "marketing site sections (header/footer/etc.)",
-    "components/marketing/sections/": "home page sections (small, composable)",
+    "components/blocks/": "page blocks (header/footer/sections)",
+    "components/blocks/sections/": "home page blocks (small, composable)",
     "components/ui/": "shadcn/ui primitives",
-    "lib/": "shared config + utilities (cn, site config, etc.)",
+    "components/layouts/": "layout helpers (renderers/composers)",
+    "lib/": "shared utilities (cn, tiny configs when truly global)",
+    "lib/config/": "page configs (declarative structure)",
     "public/": "static assets",
-    "hooks/": "optional (add when you introduce reusable client hooks)",
-    "services/": "optional (client-side wrappers for fetch / browser APIs)",
-    "utils/": "optional (pure helpers if they outgrow lib/utils.ts)",
   },
   conventions: {
     fileBudgets: {
@@ -49,8 +48,9 @@ export const projectConfig = {
     marketingSections: {
       homepage: {
         orchestrator: "app/page.tsx (compose sections; minimal logic)",
-        sections: "components/marketing/sections/*.tsx",
-        heroParts: "components/marketing/hero/*.tsx (optional splits)",
+        sections: "components/blocks/sections/*.tsx",
+        heroParts: "components/blocks/hero/*.tsx (optional splits)",
+        dataFlow: "avoid passing props; keep copy/data inside each section component",
       },
     },
     shadcn: {
@@ -112,4 +112,4 @@ export const projectConfig = {
 ## Why this is smaller than the previous config
 
 - Drops folders that don't exist yet (`types/`, `store/`, `data/`, `providers/`, `styles/`, `assets/`, `config/`).
-- Keeps only the conventions that match this repo today, while leaving hooks/services/utils as **optional** growth paths.
+- Keeps only the conventions that match this repo today.
