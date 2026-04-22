@@ -17,10 +17,9 @@ This repo is a boilerplate used to generate other projects. Optimize for **small
 ## Next.js structure
 
 - Keep `app/page.tsx` as an **orchestrator** (compose sections; minimal logic).
-- Add new homepage content as a new file under `components/marketing/sections/**`.
+- Add new homepage content as a new file under `components/blocks/sections/**`.
 
 ## Growth pattern
 
 - When adding a feature, create a new folder/file set (and export from an index if needed).
 - Avoid dumping new helpers into existing large modules; prefer `lib/<feature>/...` when a feature grows.
-

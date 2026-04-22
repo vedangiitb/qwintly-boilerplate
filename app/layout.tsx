@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} font-[var(--font-body)] antialiased`}
+        className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} font-(--font-body) antialiased`}
       >
         <TooltipProvider>{children}</TooltipProvider>
       </body>
