@@ -11,9 +11,9 @@ export type RenderContext = {
 };
 
 export function RenderElement({ el, ctx }: { el: BuilderElement; ctx?: RenderContext }) {
-  if (el.visible === false) return null;
-
   const router = useRouter();
+  
+  if (el.visible === false) return null;
   const resolvedCtx: RenderContext =
     ctx ??
     ({
