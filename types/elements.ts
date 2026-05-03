@@ -1,14 +1,18 @@
 // types/elements.ts
-export type ElementType =
-  | "fragment"
-  | "div"
-  | "text"
-  | "image"
-  | "button"
-  | "input"
-  | "textarea"
-  | "link"
-  | "icon";
+
+export const ELEMENT_TYPES = [
+  "fragment",
+  "div",
+  "text",
+  "image",
+  "button",
+  "input",
+  "textarea",
+  "link",
+  "icon",
+] as const;
+
+export type ElementType = (typeof ELEMENT_TYPES)[number];
 
 export type BuilderElement = {
   id: string;
