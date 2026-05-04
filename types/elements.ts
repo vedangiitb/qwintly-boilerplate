@@ -1,5 +1,7 @@
 // types/elements.ts
 
+import type { CSSProperties } from "react";
+
 export const ELEMENT_TYPES = [
   "fragment",
   "div",
@@ -14,11 +16,20 @@ export const ELEMENT_TYPES = [
 
 export type ElementType = (typeof ELEMENT_TYPES)[number];
 
+export type OnClickAction =
+  | { kind: "route"; href: string; replace?: boolean }
+  | { kind: "back" }
+  | { kind: "reload" }
+  | { kind: "external"; href: string; newTab?: boolean };
+
 export type BuilderElement = {
   id: string;
   type: ElementType;
 
   props?: {
+    style?: CSSProperties;
+    onClick?: OnClickAction;
+
     text?: string;
     src?: string;
     alt?: string;

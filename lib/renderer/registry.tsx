@@ -4,25 +4,36 @@ import type { ReactNode } from "react";
 import { icons } from "lucide-react";
 import type { BuilderElement, ElementType } from "@/types/elements";
 import { twMerge } from "tailwind-merge";
+import type { RenderContext } from "./RenderElement";
 
-type ElementRenderer = (el: BuilderElement) => ReactNode;
+type ElementRenderer = (el: BuilderElement, ctx: RenderContext) => ReactNode;
 
 export const registry: Partial<Record<ElementType, ElementRenderer>> = {
-  fragment: (el) => <>{renderChildren(el.children)}</>,
+  fragment: (el, ctx) => <>{renderChildren(el.children, ctx)}</>,
   
-  div: (el) => (
-    <div id={el.id} className={twMerge(el.className)}>
-      {renderChildren(el.children)}
+  div: (el, ctx) => (
+    <div
+      id={el.id}
+      className={twMerge(el.className)}
+      style={el.props?.style}
+      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
+    >
+      {renderChildren(el.children, ctx)}
     </div>
   ),
 
-  text: (el) => (
-    <p id={el.id} className={twMerge(el.className)}>
+  text: (el, ctx) => (
+    <p
+      id={el.id}
+      className={twMerge(el.className)}
+      style={el.props?.style}
+      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
+    >
       {el.props?.text}
     </p>
   ),
 
-  image: (el) => {
+  image: (el, ctx) => {
     if (!el.props?.src) return null;
 
     return (
@@ -30,44 +41,52 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
       <img
         id={el.id}
         className={twMerge(el.className)}
+        style={el.props?.style}
+        onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
         src={el.props.src}
         alt={el.props.alt ?? ""}
       />
     );
   },
 
-  input: (el) => (
+  input: (el, ctx) => (
     <input
       id={el.id}
       className={twMerge(el.className)}
+      style={el.props?.style}
+      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
       placeholder={el.props?.placeholder}
       type={el.props?.type || "text"}
       defaultValue={el.props?.value}
     />
   ),
 
-  textarea: (el) => (
+  textarea: (el, ctx) => (
     <textarea
       id={el.id}
       className={twMerge(el.className)}
+      style={el.props?.style}
+      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
       placeholder={el.props?.placeholder}
       defaultValue={el.props?.value}
     />
   ),
 
-  link: (el) => (
+  link: (el, ctx) => (
     <a
       id={el.id}
       className={twMerge(el.className)}
+      style={el.props?.style}
+      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
       href={el.props?.href ?? "#"}
       target={el.props?.target}
       rel={el.props?.rel}
     >
-      {el.children?.length ? renderChildren(el.children) : el.props?.text}
+      {el.children?.length ? renderChildren(el.children, ctx) : el.props?.text}
     </a>
   ),
 
-  icon: (el) => {
+  icon: (el, ctx) => {
     const iconName = el.props?.name ?? el.meta?.name;
     if (!iconName) return null;
 
@@ -81,17 +100,25 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
         size={el.props?.size}
         color={el.props?.color}
         strokeWidth={el.props?.strokeWidth}
+        onClick={el.props?.onClick ? ctx.onClick<SVGSVGElement>(el.props.onClick) : undefined}
       />
     );
   },
 
-  button: (el) => (
-    <button id={el.id} className={twMerge(el.className)}>
-      {el.children?.length ? renderChildren(el.children) : el.props?.text}
+  button: (el, ctx) => (
+    <button
+      id={el.id}
+      className={twMerge(el.className)}
+      style={el.props?.style}
+      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
+    >
+      {el.children?.length ? renderChildren(el.children, ctx) : el.props?.text}
     </button>
   ),
 };
 
-function renderChildren(children?: BuilderElement[]) {
-  return children?.map((child) => <RenderElement key={child.id} el={child} />);
+function renderChildren(children: BuilderElement[] | undefined, ctx: RenderContext) {
+  return children?.map((child) => (
+    <RenderElement key={child.id} el={child} ctx={ctx} />
+  ));
 }
