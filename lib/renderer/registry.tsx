@@ -1,21 +1,20 @@
 // lib/renderer/registry.tsx
-import { RenderElement } from "./RenderElement";
-import type { ReactNode } from "react";
-import { icons } from "lucide-react";
 import type { BuilderElement, ElementType } from "@/types/elements";
+import { icons } from "lucide-react";
+import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import type { RenderContext } from "./RenderElement";
+import { RenderElement } from "./RenderElement";
 
 type ElementRenderer = (el: BuilderElement, ctx: RenderContext) => ReactNode;
 
 export const registry: Partial<Record<ElementType, ElementRenderer>> = {
   fragment: (el, ctx) => <>{renderChildren(el.children, ctx)}</>,
-  
+
   div: (el, ctx) => (
     <div
       id={el.id}
       className={twMerge(el.className)}
-      style={el.props?.style}
       onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
     >
       {renderChildren(el.children, ctx)}
@@ -26,7 +25,6 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
     <p
       id={el.id}
       className={twMerge(el.className)}
-      style={el.props?.style}
       onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
     >
       {el.props?.text}
@@ -41,7 +39,6 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
       <img
         id={el.id}
         className={twMerge(el.className)}
-        style={el.props?.style}
         onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
         src={el.props.src}
         alt={el.props.alt ?? ""}
@@ -53,7 +50,6 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
     <input
       id={el.id}
       className={twMerge(el.className)}
-      style={el.props?.style}
       onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
       placeholder={el.props?.placeholder}
       type={el.props?.type || "text"}
@@ -65,7 +61,6 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
     <textarea
       id={el.id}
       className={twMerge(el.className)}
-      style={el.props?.style}
       onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
       placeholder={el.props?.placeholder}
       defaultValue={el.props?.value}
@@ -76,7 +71,6 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
     <a
       id={el.id}
       className={twMerge(el.className)}
-      style={el.props?.style}
       onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
       href={el.props?.href ?? "#"}
       target={el.props?.target}
@@ -100,7 +94,11 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
         size={el.props?.size}
         color={el.props?.color}
         strokeWidth={el.props?.strokeWidth}
-        onClick={el.props?.onClick ? ctx.onClick<SVGSVGElement>(el.props.onClick) : undefined}
+        onClick={
+          el.props?.onClick
+            ? ctx.onClick<SVGSVGElement>(el.props.onClick)
+            : undefined
+        }
       />
     );
   },
@@ -109,7 +107,6 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
     <button
       id={el.id}
       className={twMerge(el.className)}
-      style={el.props?.style}
       onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
     >
       {el.children?.length ? renderChildren(el.children, ctx) : el.props?.text}
@@ -117,7 +114,10 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
   ),
 };
 
-function renderChildren(children: BuilderElement[] | undefined, ctx: RenderContext) {
+function renderChildren(
+  children: BuilderElement[] | undefined,
+  ctx: RenderContext,
+) {
   return children?.map((child) => (
     <RenderElement key={child.id} el={child} ctx={ctx} />
   ));
