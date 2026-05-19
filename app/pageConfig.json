@@ -3,7 +3,7 @@
     {
       "id": "root",
       "type": "div",
-      "className": "min-h-screen p-6",
+      "className": "min-h-screen",
       "props": {}
     }
   ]

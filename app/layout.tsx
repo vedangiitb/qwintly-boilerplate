@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Fraunces, JetBrains_Mono, Manrope } from "next/font/google";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 const bodyFont = Manrope({
@@ -34,7 +33,7 @@ export default function RootLayout({
       <body
         className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} font-(--font-body) antialiased`}
       >
-        <TooltipProvider>{children}</TooltipProvider>
+        {children}
       </body>
     </html>
   );
