@@ -2,7 +2,7 @@
   "version": 1,
   "tokens": {
     "radius": "0.85rem",
-    "background": "oklch(0.985 0.008 80.2)",
+    "background": "oklch(01 0 0)",
     "foreground": "oklch(0.2 0.03 255.4)",
     "card": "oklch(0.995 0.004 80.2)",
     "cardForeground": "oklch(0.2 0.03 255.4)",

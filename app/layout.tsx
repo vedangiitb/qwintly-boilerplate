@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Fraunces, JetBrains_Mono, Manrope } from "next/font/google";
+import { Fraunces, JetBrains_Mono, Manrope, Geist } from "next/font/google";
 import "./globals.css";
 import styleConfig from "./styleConfig.json";
 import { assertStyleConfig } from "@/types/styleConfig";
 import { buildCssVars } from "@/lib/styles/buildCssVars";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const bodyFont = Manrope({
   variable: "--font-body",
@@ -38,7 +41,7 @@ export default function RootLayout({
   const styleTokens = buildCssVars(cfg);
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={cn("scroll-smooth", "font-sans", geist.variable)}>
       <head>
         <style
           id="qwintly-style-tokens"
