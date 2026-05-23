@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Fraunces, JetBrains_Mono, Manrope } from "next/font/google";
+import { Fraunces, JetBrains_Mono, Manrope, Geist } from "next/font/google";
 import "./globals.css";
+import styleConfig from "./styleConfig.json";
+import { assertStyleConfig } from "@/types/styleConfig";
+import { buildCssVars } from "@/lib/styles/buildCssVars";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const bodyFont = Manrope({
   variable: "--font-body",
@@ -28,8 +34,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cfg =
+    process.env.NODE_ENV === "production"
+      ? (styleConfig as any)
+      : assertStyleConfig(styleConfig);
+  const styleTokens = buildCssVars(cfg);
+
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={cn("scroll-smooth", "font-sans", geist.variable)}>
+      <head>
+        <style
+          id="qwintly-style-tokens"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: styleTokens }}
+        />
+      </head>
       <body
         className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} font-(--font-body) antialiased`}
       >

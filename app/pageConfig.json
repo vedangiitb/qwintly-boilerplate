@@ -3,7 +3,7 @@
     {
       "id": "root",
       "type": "div",
-      "className": "min-h-screen",
+      "className": "min-h-screen bg-background text-foreground",
       "props": {}
     }
   ]
