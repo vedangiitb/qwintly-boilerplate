@@ -303,7 +303,7 @@ export default function NotFound() {
               Preview Configuration Missing
             </h2>
             <p className="text-sm md:text-base text-slate-400 leading-relaxed font-light">
-              We couldn't locate this preview session. The preview may have
+              We couldn&apos;t locate this preview session. The preview may have
               expired, or the editor might be reloading.
             </p>
           </div>
