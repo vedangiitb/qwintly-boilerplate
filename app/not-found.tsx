@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, HelpCircle, RotateCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-export default function NotFound() {
+export default function NotFoundPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [mouse, setMouse] = useState<{ x: number | null; y: number | null }>({
@@ -75,7 +75,7 @@ export default function NotFound() {
         radius: baseRadius,
         baseRadius,
         color: colors[Math.floor(Math.random() * colors.length)],
-        alpha: isClick ? 1.0 : Math.random() * 0.5 + 0.2,
+        alpha: isClick ? 1 : Math.random() * 0.5 + 0.2,
         pulseSpeed: Math.random() * 0.02 + 0.005,
         pulseTime: Math.random() * Math.PI * 2,
       };
@@ -228,14 +228,14 @@ export default function NotFound() {
   }, [mouse]);
 
   const handleRefresh = () => {
-    window.location.href = "/";
+    globalThis.location.href = "/";
   };
 
   const handleGoBack = () => {
-    if (window.history.length > 1) {
-      window.history.back();
+    if (globalThis.history.length > 1) {
+      globalThis.history.back();
     } else {
-      window.location.href = "/";
+      globalThis.location.href = "/";
     }
   };
 
@@ -303,8 +303,9 @@ export default function NotFound() {
               Preview Configuration Missing
             </h2>
             <p className="text-sm md:text-base text-slate-400 leading-relaxed font-light">
-              We couldn&apos;t locate this preview session. The preview may have
-              expired, or the editor might be reloading.
+              {
+                "We couldn't locate this preview session. The preview may have expired, or the editor might be reloading."
+              }
             </p>
           </div>
 

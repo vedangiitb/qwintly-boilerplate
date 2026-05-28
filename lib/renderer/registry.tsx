@@ -9,7 +9,15 @@ import { RenderElement } from "./RenderElement";
 type ElementRenderer = (el: BuilderElement, ctx: RenderContext) => ReactNode;
 
 export const registry: Partial<Record<ElementType, ElementRenderer>> = {
-  fragment: (el, ctx) => <>{renderChildren(el.children, ctx)}</>,
+  fragment: (el, ctx) => (
+    <div
+      id={el.id}
+      className={twMerge(el.className)}
+      style={{ display: "contents" }}
+    >
+      {renderChildren(el.children, ctx)}
+    </div>
+  ),
 
   div: (el, ctx) => (
     <div
