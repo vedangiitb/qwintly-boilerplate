@@ -10,7 +10,7 @@ export type RenderContext = {
   onClick: <T extends Element = HTMLElement>(action: OnClickAction) => MouseEventHandler<T>;
 };
 
-export function RenderElement({ el, ctx }: { el: BuilderElement; ctx?: RenderContext }) {
+export function RenderElement({ el, ctx }: Readonly<{ el: BuilderElement; ctx?: RenderContext }>) {
   const router = useRouter();
   
   if (el.visible === false) return null;
@@ -27,8 +27,8 @@ export function RenderElement({ el, ctx }: { el: BuilderElement; ctx?: RenderCon
 
         if (action.kind === "external") {
           e.preventDefault();
-          if (action.newTab) window.open(action.href, "_blank", "noopener,noreferrer");
-          else window.location.href = action.href;
+          if (action.newTab) globalThis.open(action.href, "_blank", "noopener,noreferrer");
+          else globalThis.location.href = action.href;
           return;
         }
 
