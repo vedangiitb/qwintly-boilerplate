@@ -1,7 +1,7 @@
 // lib/renderer/registry.tsx
 import type { BuilderElement, ElementType } from "@/types/elements";
 import { icons } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ReactNode, ChangeEvent } from "react";
 import { twMerge } from "tailwind-merge";
 import type { RenderContext } from "./RenderElement";
 import { RenderElement } from "./RenderElement";
@@ -54,26 +54,66 @@ export const registry: Partial<Record<ElementType, ElementRenderer>> = {
     );
   },
 
-  input: (el, ctx) => (
-    <input
-      id={el.id}
-      className={twMerge(el.className)}
-      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
-      placeholder={el.props?.placeholder}
-      type={el.props?.type || "text"}
-      defaultValue={el.props?.value}
-    />
-  ),
+  input: (el, ctx) => {
+    const bindState = el.props?.bindState;
+    const isGlobal = el.props?.bindStateScope === "global";
+    const value = bindState
+      ? (isGlobal ? (ctx.globalState?.[bindState] ?? "") : (ctx.state?.[bindState] ?? ""))
+      : undefined;
+    const defaultValue = bindState ? undefined : el.props?.value;
+    const onChange = bindState
+      ? (e: ChangeEvent<HTMLInputElement>) => {
+          if (isGlobal && ctx.updateGlobalState) {
+            ctx.updateGlobalState(bindState, e.target.value);
+          } else if (ctx.updateState) {
+            ctx.updateState(bindState, e.target.value);
+          }
+        }
+      : undefined;
 
-  textarea: (el, ctx) => (
-    <textarea
-      id={el.id}
-      className={twMerge(el.className)}
-      onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
-      placeholder={el.props?.placeholder}
-      defaultValue={el.props?.value}
-    />
-  ),
+    return (
+      <input
+        id={el.id}
+        className={twMerge(el.className)}
+        onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
+        placeholder={el.props?.placeholder}
+        type={el.props?.type || "text"}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+      />
+    );
+  },
+
+  textarea: (el, ctx) => {
+    const bindState = el.props?.bindState;
+    const isGlobal = el.props?.bindStateScope === "global";
+    const value = bindState
+      ? (isGlobal ? (ctx.globalState?.[bindState] ?? "") : (ctx.state?.[bindState] ?? ""))
+      : undefined;
+    const defaultValue = bindState ? undefined : el.props?.value;
+    const onChange = bindState
+      ? (e: ChangeEvent<HTMLTextAreaElement>) => {
+          if (isGlobal && ctx.updateGlobalState) {
+            ctx.updateGlobalState(bindState, e.target.value);
+          } else if (ctx.updateState) {
+            ctx.updateState(bindState, e.target.value);
+          }
+        }
+      : undefined;
+
+    return (
+      <textarea
+        id={el.id}
+        className={twMerge(el.className)}
+        onClick={el.props?.onClick ? ctx.onClick(el.props.onClick) : undefined}
+        placeholder={el.props?.placeholder}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+      />
+    );
+  },
 
   link: (el, ctx) => (
     <a

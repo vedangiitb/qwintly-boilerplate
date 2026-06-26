@@ -1,10 +1,626 @@
 {
+  "state": {
+    "counter": 5,
+    "userName": "Jane Doe",
+    "userRole": "Lead Product Designer",
+    "bio": "Designing the future of interactive visual editing tools.",
+    "showBio": true,
+    "alertMessage": "Welcome to your new stateful website generator!",
+    "showAlert": true
+  },
+  "components": {
+    "StatCard": {
+      "element": {
+        "id": "stat-card-root",
+        "type": "div",
+        "className": "p-5 bg-card border border-border rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col gap-2",
+        "children": [
+          {
+            "id": "stat-card-header",
+            "type": "div",
+            "className": "flex justify-between items-center",
+            "children": [
+              {
+                "id": "stat-card-title",
+                "type": "text",
+                "className": "text-xs font-semibold uppercase tracking-wider text-muted-foreground",
+                "props": { "text": "{{compProps.title}}" }
+              },
+              {
+                "id": "stat-card-icon",
+                "type": "icon",
+                "props": {
+                  "name": "{{compProps.iconName}}",
+                  "size": 16,
+                  "className": "{{compProps.iconColor || 'text-primary'}}"
+                }
+              }
+            ]
+          },
+          {
+            "id": "stat-card-value",
+            "type": "text",
+            "className": "text-2xl font-bold font-mono tracking-tight text-foreground",
+            "props": { "text": "{{compProps.value}}" }
+          },
+          {
+            "id": "stat-card-desc",
+            "type": "text",
+            "className": "text-xs text-muted-foreground",
+            "props": { "text": "{{compProps.description}}" }
+          }
+        ]
+      }
+    }
+  },
   "elements": [
     {
-      "id": "root",
+      "id": "page-wrapper",
       "type": "div",
-      "className": "min-h-screen bg-background text-foreground",
-      "props": {}
+      "className": "min-h-screen bg-background text-foreground transition-colors duration-300 {{global.themeMode === 'dark' ? 'dark' : ''}}",
+      "children": [
+        {
+          "id": "main-header",
+          "type": "component",
+          "props": {
+            "componentId": "GlobalHeader",
+            "inputs": {
+              "logoText": "Qwintly Studio"
+            }
+          },
+          "children": [
+            {
+              "id": "header-nav-links",
+              "type": "div",
+              "className": "flex items-center gap-4",
+              "children": [
+                {
+                  "id": "theme-toggle-btn",
+                  "type": "button",
+                  "className": "p-2 rounded-lg bg-secondary hover:bg-secondary/85 text-secondary-foreground flex items-center gap-2 text-xs font-semibold border border-border shadow-sm transition-all cursor-pointer",
+                  "props": {
+                    "onClick": {
+                      "kind": "setState",
+                      "key": "themeMode",
+                      "value": "{{global.themeMode === 'dark' ? 'light' : 'dark'}}",
+                      "scope": "global"
+                    }
+                  },
+                  "children": [
+                    {
+                      "id": "theme-toggle-icon",
+                      "type": "icon",
+                      "props": {
+                        "name": "{{global.themeMode === 'dark' ? 'Sun' : 'Moon'}}",
+                        "size": 14
+                      }
+                    },
+                    {
+                      "id": "theme-toggle-text",
+                      "type": "text",
+                      "props": {
+                        "text": "{{global.themeMode === 'dark' ? 'Light Mode' : 'Dark Mode'}}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "body-container",
+          "type": "div",
+          "className": "max-w-4xl mx-auto px-6 py-10 flex flex-col gap-8",
+          "children": [
+            {
+              "id": "hero-section",
+              "type": "div",
+              "className": "flex flex-col gap-3 text-center sm:text-left",
+              "children": [
+                {
+                  "id": "hero-badge",
+                  "type": "div",
+                  "className": "inline-flex self-center sm:self-start px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-xs font-semibold rounded-full",
+                  "children": [
+                    {
+                      "id": "badge-text",
+                      "type": "text",
+                      "props": {
+                        "text": "✨ Page State + Global Shared State Active"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "hero-title",
+                  "type": "text",
+                  "className": "text-4xl font-extrabold tracking-tight font-display text-foreground sm:text-5xl",
+                  "props": { "text": "Dynamic Website Generator" }
+                },
+                {
+                  "id": "hero-subtitle",
+                  "type": "text",
+                  "className": "text-base text-muted-foreground max-w-xl",
+                  "props": {
+                    "text": "A playground demonstrating cascading component lookups and editing both page-local and global-scoped states."
+                  }
+                }
+              ]
+            },
+            {
+              "id": "dismissible-alert",
+              "type": "div",
+              "visible": "{{showAlert}}",
+              "className": "p-4 bg-primary/5 border border-primary/20 rounded-xl flex justify-between items-start gap-3",
+              "children": [
+                {
+                  "id": "alert-content",
+                  "type": "div",
+                  "className": "flex gap-3",
+                  "children": [
+                    {
+                      "id": "alert-icon",
+                      "type": "icon",
+                      "props": {
+                        "name": "Info",
+                        "size": 18,
+                        "className": "text-primary shrink-0 mt-0.5"
+                      }
+                    },
+                    {
+                      "id": "alert-text-container",
+                      "type": "div",
+                      "className": "flex flex-col gap-1",
+                      "children": [
+                        {
+                          "id": "alert-title",
+                          "type": "text",
+                          "className": "font-semibold text-sm text-foreground",
+                          "props": { "text": "State Action Demo" }
+                        },
+                        {
+                          "id": "alert-desc",
+                          "type": "text",
+                          "className": "text-xs text-muted-foreground",
+                          "props": { "text": "{{alertMessage}}" }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "alert-dismiss-btn",
+                  "type": "button",
+                  "className": "p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors cursor-pointer",
+                  "props": {
+                    "onClick": {
+                      "kind": "setState",
+                      "key": "showAlert",
+                      "value": false
+                    }
+                  },
+                  "children": [
+                    {
+                      "id": "dismiss-icon",
+                      "type": "icon",
+                      "props": {
+                        "name": "X",
+                        "size": 14
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "stats-grid",
+              "type": "div",
+              "className": "grid grid-cols-1 md:grid-cols-3 gap-4",
+              "children": [
+                {
+                  "id": "stat-clicks",
+                  "type": "component",
+                  "props": {
+                    "componentId": "StatCard",
+                    "inputs": {
+                      "title": "Local Counter",
+                      "iconName": "Activity",
+                      "value": "{{counter}}",
+                      "description": "Increments page counter state"
+                    }
+                  }
+                },
+                {
+                  "id": "stat-global-title",
+                  "type": "component",
+                  "props": {
+                    "componentId": "StatCard",
+                    "inputs": {
+                      "title": "Global Site Title",
+                      "iconName": "Globe",
+                      "value": "{{global.siteTitle}}",
+                      "description": "Shared across all pages",
+                      "iconColor": "text-amber-500"
+                    }
+                  }
+                },
+                {
+                  "id": "stat-global-user",
+                  "type": "component",
+                  "props": {
+                    "componentId": "StatCard",
+                    "inputs": {
+                      "title": "Global User",
+                      "iconName": "UserCheck",
+                      "value": "{{global.globalUser}}",
+                      "description": "Shared global session user",
+                      "iconColor": "text-emerald-500"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "main-grid",
+              "type": "div",
+              "className": "grid grid-cols-1 md:grid-cols-2 gap-8",
+              "children": [
+                {
+                  "id": "controls-col",
+                  "type": "div",
+                  "className": "flex flex-col gap-6",
+                  "children": [
+                    {
+                      "id": "counter-card",
+                      "type": "div",
+                      "className": "p-6 bg-card border border-border rounded-xl shadow-sm flex flex-col gap-4",
+                      "children": [
+                        {
+                          "id": "counter-header",
+                          "type": "div",
+                          "className": "flex flex-col gap-1",
+                          "children": [
+                            {
+                              "id": "counter-title",
+                              "type": "text",
+                              "className": "font-bold text-lg text-foreground",
+                              "props": { "text": "Counter Control (Page State)" }
+                            },
+                            {
+                              "id": "counter-subtitle",
+                              "type": "text",
+                              "className": "text-xs text-muted-foreground",
+                              "props": {
+                                "text": "Modifies numerical state scoped strictly to this page."
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "counter-control-row",
+                          "type": "div",
+                          "className": "flex items-center gap-4 mt-2",
+                          "children": [
+                            {
+                              "id": "dec-btn",
+                              "type": "button",
+                              "className": "px-3 py-1.5 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg border border-border text-sm font-semibold transition-all select-none cursor-pointer",
+                              "props": {
+                                "onClick": {
+                                  "kind": "setState",
+                                  "key": "counter",
+                                  "operator": "decrement",
+                                  "value": 1
+                                }
+                              },
+                              "children": [
+                                {
+                                  "id": "dec-icon",
+                                  "type": "icon",
+                                  "props": { "name": "Minus", "size": 16 }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "counter-display",
+                              "type": "text",
+                              "className": "text-3xl font-extrabold font-mono w-16 text-center text-foreground",
+                              "props": { "text": "{{counter}}" }
+                            },
+                            {
+                              "id": "inc-btn",
+                              "type": "button",
+                              "className": "px-3 py-1.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/95 text-sm font-semibold transition-all select-none cursor-pointer",
+                              "props": {
+                                "onClick": {
+                                  "kind": "setState",
+                                  "key": "counter",
+                                  "operator": "increment",
+                                  "value": 1
+                                }
+                              },
+                              "children": [
+                                {
+                                  "id": "inc-icon",
+                                  "type": "icon",
+                                  "props": { "name": "Plus", "size": 16 }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "global-settings-card",
+                      "type": "div",
+                      "className": "p-6 bg-card border border-border rounded-xl shadow-sm flex flex-col gap-4",
+                      "children": [
+                        {
+                          "id": "global-settings-header",
+                          "type": "div",
+                          "className": "flex flex-col gap-1",
+                          "children": [
+                            {
+                              "id": "global-settings-title",
+                              "type": "text",
+                              "className": "font-bold text-lg text-foreground",
+                              "props": { "text": "Global Settings Control" }
+                            },
+                            {
+                              "id": "global-settings-subtitle",
+                              "type": "text",
+                              "className": "text-xs text-muted-foreground",
+                              "props": {
+                                "text": "Two-way bindings and buttons directly connected to the layout-level global state context."
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": "global-settings-fields",
+                          "type": "div",
+                          "className": "flex flex-col gap-3 mt-2",
+                          "children": [
+                            {
+                              "id": "field-global-title-container",
+                              "type": "div",
+                              "className": "flex flex-col gap-1",
+                              "children": [
+                                {
+                                  "id": "label-global-title",
+                                  "type": "text",
+                                  "className": "text-xs font-semibold text-muted-foreground",
+                                  "props": { "text": "Site Title (Global)" }
+                                },
+                                {
+                                  "id": "input-global-title",
+                                  "type": "input",
+                                  "className": "px-3 py-2 border border-border rounded-lg bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20",
+                                  "props": {
+                                    "placeholder": "Enter site title...",
+                                    "bindState": "siteTitle",
+                                    "bindStateScope": "global"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "field-global-user-container",
+                              "type": "div",
+                              "className": "flex flex-col gap-1",
+                              "children": [
+                                {
+                                  "id": "label-global-user",
+                                  "type": "text",
+                                  "className": "text-xs font-semibold text-muted-foreground",
+                                  "props": { "text": "Session Username (Global)" }
+                                },
+                                {
+                                  "id": "input-global-user",
+                                  "type": "input",
+                                  "className": "px-3 py-2 border border-border rounded-lg bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20",
+                                  "props": {
+                                    "placeholder": "Enter session user...",
+                                    "bindState": "globalUser",
+                                    "bindStateScope": "global"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "preview-col",
+                  "type": "div",
+                  "className": "flex flex-col gap-6",
+                  "children": [
+                    {
+                      "id": "preview-card",
+                      "type": "div",
+                      "className": "p-6 bg-card border border-border rounded-xl shadow-sm flex flex-col gap-6 relative overflow-hidden h-full justify-between",
+                      "children": [
+                        {
+                          "id": "preview-bg-accent",
+                          "type": "div",
+                          "className": "absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"
+                        },
+                        {
+                          "id": "preview-top",
+                          "type": "div",
+                          "className": "flex flex-col gap-4",
+                          "children": [
+                            {
+                              "id": "preview-header",
+                              "type": "div",
+                              "className": "flex justify-between items-center",
+                              "children": [
+                                {
+                                  "id": "preview-badge",
+                                  "type": "text",
+                                  "className": "text-[10px] font-bold tracking-wider uppercase bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-2 py-0.5 rounded",
+                                  "props": { "text": "Live Card Preview" }
+                                },
+                                {
+                                  "id": "bio-toggle-btn",
+                                  "type": "button",
+                                  "className": "text-xs text-primary hover:underline font-medium flex items-center gap-1 cursor-pointer",
+                                  "props": {
+                                    "onClick": {
+                                      "kind": "setState",
+                                      "key": "showBio",
+                                      "operator": "toggle"
+                                    }
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "bio-toggle-text",
+                                      "type": "text",
+                                      "props": {
+                                        "text": "{{showBio ? 'Hide Bio' : 'Show Bio'}}"
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "id": "preview-user-info",
+                              "type": "div",
+                              "className": "flex items-center gap-4 mt-2",
+                              "children": [
+                                {
+                                  "id": "preview-avatar",
+                                  "type": "div",
+                                  "className": "w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl font-display border border-primary/20 shrink-0",
+                                  "children": [
+                                    {
+                                      "id": "avatar-char",
+                                      "type": "text",
+                                      "props": {
+                                        "text": "{{(userName && userName.length > 0) ? userName.charAt(0).toUpperCase() : 'U'}}"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "preview-meta",
+                                  "type": "div",
+                                  "className": "flex flex-col",
+                                  "children": [
+                                    {
+                                      "id": "preview-name",
+                                      "type": "text",
+                                      "className": "text-lg font-bold text-foreground truncate max-w-[200px]",
+                                      "props": { "text": "{{userName || 'Unnamed User'}}" }
+                                    },
+                                    {
+                                      "id": "preview-role",
+                                      "type": "text",
+                                      "className": "text-xs text-muted-foreground truncate max-w-[200px]",
+                                      "props": { "text": "{{userRole || 'No Title'}}" }
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "id": "preview-divider",
+                              "type": "div",
+                              "className": "border-t border-border/80 my-2"
+                            },
+                            {
+                              "id": "preview-bio-inputs",
+                              "type": "div",
+                              "className": "flex flex-col gap-2 bg-muted/30 p-4 rounded-lg border border-border/50",
+                              "children": [
+                                {
+                                  "id": "preview-bio",
+                                  "type": "text",
+                                  "visible": "{{showBio}}",
+                                  "className": "text-sm text-foreground/80 leading-relaxed italic",
+                                  "props": { "text": "{{bio || 'No bio entered yet...'}}" }
+                                },
+                                {
+                                  "id": "preview-global-meta",
+                                  "type": "text",
+                                  "className": "text-[11px] text-muted-foreground mt-2 border-t border-border/40 pt-2 flex items-center gap-1",
+                                  "props": { "text": "👤 Global session: {{global.globalUser}} (connected to {{global.siteTitle}})" }
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "preview-actions",
+                          "type": "div",
+                          "className": "flex gap-2 mt-4 pt-4 border-t border-border/60",
+                          "children": [
+                            {
+                              "id": "reset-profile-btn",
+                              "type": "button",
+                              "className": "w-full py-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-lg border border-border text-xs font-semibold transition-all text-center cursor-pointer",
+                              "props": {
+                                "onClick": {
+                                  "kind": "setState",
+                                  "key": "userName",
+                                  "value": "Jane Doe"
+                                }
+                              },
+                              "children": [
+                                {
+                                  "id": "reset-btn-txt-1",
+                                  "type": "text",
+                                  "props": { "text": "Reset Name" }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "reset-global-btn",
+                              "type": "button",
+                              "className": "w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-xs font-semibold transition-all text-center cursor-pointer",
+                              "props": {
+                                "onClick": {
+                                  "kind": "setState",
+                                  "key": "siteTitle",
+                                  "value": "Qwintly Enterprise",
+                                  "scope": "global"
+                                }
+                              },
+                              "children": [
+                                {
+                                  "id": "reset-global-txt",
+                                  "type": "text",
+                                  "props": { "text": "Reset Site Title" }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "main-footer",
+          "type": "component",
+          "props": {
+            "componentId": "GlobalFooter",
+            "inputs": {
+              "copyrightText": "© 2026 Qwintly Global. All rights reserved."
+            }
+          }
+        }
+      ]
     }
   ]
 }

@@ -5,6 +5,7 @@ import styleConfig from "./styleConfig.json";
 import { assertStyleConfig } from "@/types/styleConfig";
 import { buildCssVars } from "@/lib/styles/buildCssVars";
 import { cn } from "@/lib/utils";
+import { GlobalStateProvider } from "@/lib/renderer/GlobalStateContext";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -52,7 +53,9 @@ export default function RootLayout({
       <body
         className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable} font-(--font-body) antialiased`}
       >
-        {children}
+        <GlobalStateProvider>
+          {children}
+        </GlobalStateProvider>
       </body>
     </html>
   );

@@ -1,0 +1,65 @@
+{
+  "state": {
+    "siteTitle": "Qwintly Enterprise",
+    "globalUser": "Jane Smith",
+    "themeMode": "light"
+  },
+  "components": {
+    "GlobalHeader": {
+      "element": {
+        "id": "global-header-root",
+        "type": "div",
+        "className": "border-b border-border bg-card/40 backdrop-blur-md px-6 py-4 flex justify-between items-center sticky top-0 z-50",
+        "children": [
+          {
+            "id": "global-header-brand",
+            "type": "div",
+            "className": "flex items-center gap-2",
+            "children": [
+              {
+                "id": "global-header-logo",
+                "type": "icon",
+                "props": {
+                  "name": "Globe",
+                  "size": 20,
+                  "className": "text-primary animate-spin-slow"
+                }
+              },
+              {
+                "id": "global-header-title",
+                "type": "text",
+                "className": "font-bold text-lg tracking-tight font-display text-foreground",
+                "props": { "text": "{{compProps.logoText || global.siteTitle}}" }
+              }
+            ]
+          },
+          {
+            "id": "global-header-slot",
+            "type": "slot"
+          }
+        ]
+      }
+    },
+    "GlobalFooter": {
+      "element": {
+        "id": "global-footer-root",
+        "type": "div",
+        "className": "border-t border-border bg-card/25 py-8 px-6 mt-16 text-center flex flex-col items-center gap-2",
+        "children": [
+          {
+            "id": "global-footer-text",
+            "type": "text",
+            "className": "text-sm text-muted-foreground",
+            "props": { "text": "{{compProps.copyrightText || '© 2026 Qwintly Inc. All rights reserved.'}}" }
+          },
+          {
+            "id": "global-footer-subtext",
+            "type": "text",
+            "className": "text-xs text-muted-foreground/60",
+            "props": { "text": "Global Component: Active across pages" }
+          }
+        ]
+      }
+    }
+  }
+}

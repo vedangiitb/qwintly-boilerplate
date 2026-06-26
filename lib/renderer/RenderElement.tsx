@@ -7,6 +7,10 @@ import type { BuilderElement, OnClickAction } from "@/types/elements";
 import type { MouseEventHandler } from "react";
 
 export type RenderContext = {
+  state?: Record<string, any>;
+  updateState?: (key: string, value: any, operator?: "set" | "toggle" | "increment" | "decrement") => void;
+  globalState?: Record<string, any>;
+  updateGlobalState?: (key: string, value: any, operator?: "set" | "toggle" | "increment" | "decrement") => void;
   onClick: <T extends Element = HTMLElement>(action: OnClickAction) => MouseEventHandler<T>;
 };
 
@@ -18,6 +22,16 @@ export function RenderElement({ el, ctx }: Readonly<{ el: BuilderElement; ctx?: 
     ctx ??
     ({
       onClick: (action) => (e) => {
+        if (action.kind === "setState") {
+          e.preventDefault();
+          if (action.scope === "global" && resolvedCtx.updateGlobalState) {
+            resolvedCtx.updateGlobalState(action.key, action.value, action.operator);
+          } else if (resolvedCtx.updateState) {
+            resolvedCtx.updateState(action.key, action.value, action.operator);
+          }
+          return;
+        }
+
         if (action.kind === "route") {
           e.preventDefault();
           if (action.replace) router.replace(action.href);
